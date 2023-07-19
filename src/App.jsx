@@ -10,9 +10,7 @@ import CodeEditor from "@uiw/react-textarea-code-editor";
 function App() {
   const [response, setResponse] = useState(null);
   const [textValue, setTextValue] = useState("");
-  const [apiKey, setApiKey] = useState(
-    "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"
-  );
+  const [apiKey, setApiKey] = useState("");
 
   useEffect(() => {}, []);
 
