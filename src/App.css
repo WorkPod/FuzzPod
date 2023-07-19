@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .bg-svg {
+  background-image: url("/LooperGroup.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+
+@font-face {
+  font-family: "octosquare";
+  src: url("./TT Octosquares Trial Condensed Regular.ttf") format("truetype");
+  /* Add additional src declarations for other file formats if needed */
+  /* You can also include font-weight and font-style properties if required */
+}
+
+@font-face {
+  font-family: "yoster";
+  src: url("./PressStart2P-Regular.ttf") format("truetype");
+  /* Add additional src declarations for other file formats if needed */
+  /* You can also include font-weight and font-style properties if required */
+}
