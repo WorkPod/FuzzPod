@@ -9,6 +9,7 @@ import CodeEditor from "@uiw/react-textarea-code-editor";
 
 function App() {
   const [response, setResponse] = useState(null);
+  const [codeResponse, setCodeResponse] = useState(null);
   const [textValue, setTextValue] = useState("");
   const [apiKey, setApiKey] = useState("");
 
@@ -36,20 +37,22 @@ function App() {
     console.log(chat_completion);
     setResponse(chat_completion);
 
-    // const code_examples = await openai.createChatCompletion({
-    //   model: "gpt-3.5-turbo",
-    //   messages: [
-    //     {
-    //       role: "system",
-    //       content:
-    //         "You will be provided with a piece of Solidity and your goal is to analyze it, then create a set of invariants for fuzz testing this code. Reply only with list of invariants without any other text.",
-    //     },
-    //     {
-    //       role: "user",
-    //       content: textValue,
-    //     },
-    //   ],
-    // });
+    const code_examples = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You will be provided with a set of invariants for the Solidity code. Create examples of fuzz tests for each one of invariants and print them out in a list. Reply only with a list of code snippets without any other code.",
+        },
+        {
+          role: "user",
+          content: chat_completion.data.choices[0].message.content,
+        },
+      ],
+    });
+    console.log(code_examples);
+    setCodeResponse(code_examples);
   };
 
   const handleApiKeyChange = (event) => {
@@ -89,7 +92,7 @@ function App() {
         <div className="h-min-xl min-h-screen h-full w-4/5 relative right-0 top-0 self-end flex flex-col bg-[#2d2d2d] gap-4">
           <div className="w-full flex flex-row">
             <CodeEditor
-              className="h-full h-min-screen min-h-screen w-1/2 relative right-0 self-end mb-48 border-r-4 border-[#343434]"
+              className="h-full h-min-screen min-h-screen w-1/2 relative right-0 self-start mb-48 border-r-4 border-[#343434]"
               value={textValue}
               language="solidity"
               placeholder="Paste your Solidity code here..."
@@ -102,10 +105,10 @@ function App() {
                   "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
               }}
             />
-            <div className="h-full h-min-screen min-h-screen w-1/2 relative right-0 self-end mb-48 bg-[#2d2d2d] text-sm px-4">
+            <div className="h-full h-min-screen min-h-screen w-1/2 relative right-0 self-start mb-48 bg-[#2d2d2d] text-sm px-4">
               <p className="text-lg mb-8 mt-2">Analysis:</p>
               <SyntaxHighlighter
-                language="solidity"
+                language="Solidity"
                 style={a11yDark}
                 className="bg-[#2d2d2d] text-sm"
               >
@@ -114,12 +117,28 @@ function App() {
                   ? response.data.choices[0].message.content
                   : "Waiting for user to provide   Solidity code..."}
               </SyntaxHighlighter>
+
+              <p className="text-lg mb-8 mt-8">Code examples:</p>
+
+              <SyntaxHighlighter
+                language="solidity"
+                style={a11yDark}
+                className="bg-[#2d2d2d] text-sm"
+              >
+                {codeResponse
+                  ? codeResponse.data.choices[0].message.content
+                  : ""}
+              </SyntaxHighlighter>
             </div>
           </div>
           <div className="right-0 w-5/6 h-48 overflow-auto bg-[#1d1d1d] fixed bottom-0 z-30 px-16 py-2 text-gray-400 text-xs border-t-4 border-[#343434] break-all ">
-            {response
+            {/* {response
               ? response.data.choices[0].message.content
-              : "Waiting for user to provide   Solidity code..."}
+              : "Waiting for user to provide   Solidity code..."} */}
+
+            {codeResponse
+              ? codeResponse.data.choices[0].message.content
+              : "..."}
           </div>
         </div>
       </div>
