@@ -11,7 +11,8 @@ import {
 import MonacoEditor from "react-monaco-editor";
 import "./userWorker";
 import copy from "copy-to-clipboard";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Menu } from "@headlessui/react";
+import SideBar from "./components/SideBar";
 
 function App() {
   const [response, setResponse] = useState({
@@ -202,25 +203,11 @@ function App() {
 
   return (
     <div className="w-screen bg-[#151414] text-gray-200">
-      <div className="h-screen flex flex-col items-center justify-center w-48 bg-[#2d2d2d] fixed left-0 z-40 border-r-4 border-[#343434]">
-        <span>OpenAI API key:</span>
-        <input
-          className="bg-[#3d3d3d] text-gray-200 overflow-hidden text-xs rounded p-1 my-4"
-          id="api-key"
-          value={apiKey}
-          onChange={handleApiKeyChange}
-          placeholder="OpenAI API key..."
-          type="password"
-        />
-        <button
-          className="bg-[#1d1d1d] hover:bg-[#1d1d1d]/60 text-white rounded py-1 px-2 font-semibold"
-          type="button"
-          onClick={() => createFuzz()}
-        >
-          fuzz
-        </button>
-        {/* {response ? response.data.choices[0].message.content : ""} */}
-      </div>
+      <SideBar
+        apiKey={apiKey}
+        onFuzz={createFuzz}
+        handleApiKeyChange={handleApiKeyChange}
+      />
       <div className="flex flex-row gap-y-40 overflow-hidden justify-start items-end self-end text-gray-200 ml-48 ">
         <div className="w-full h-screen flex flex-row">
           <div className="w-1/2 h-screen">
@@ -244,7 +231,7 @@ function App() {
                     key={index}
                   >
                     <Disclosure>
-                      <Disclosure.Button className="py-2 w-full text-start">
+                      <Disclosure.Button className="py-2 w-full text-start font-semibold">
                         <div className="flex w-full gap-2 cursor-pointer items-center">
                           <button className="w-6 h-full">
                             <svg
